@@ -127,7 +127,7 @@ const Register: React.FC = (): ReactElement => {
                     showSpinner={isLoading}
                     spinnerTitle="Processing"
                     fullWidth
-                    submit
+                    type="submit"
                   />
                 </div>
               </form>

@@ -1,7 +1,7 @@
 import React, { Dispatch, ReactElement, SetStateAction } from 'react';
 import Modal from './ui/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus, faUserPlus } from '@fortawesome/free-solid-svg-icons';
+import { faFolderPlus } from '@fortawesome/free-solid-svg-icons';
 import Input from './ui/Input';
 import Textarea from './ui/Textarea';
 
