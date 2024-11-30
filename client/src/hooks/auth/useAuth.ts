@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import api from '../../redux/api';
 import { logout, setUser } from '../../redux/slices/authSlice';
 import { handleApiError } from '../../utils/apiHandlers';
+import { useNotification } from '../../contexts/NotificationContext';
 
 interface UseAuthReturn {
   validate: () => void;
@@ -10,6 +11,7 @@ interface UseAuthReturn {
 
 const useAuth = (): UseAuthReturn => {
   const [check, { isLoading }] = api.useAuthCheckMutation();
+  const { showNotification } = useNotification();
   const dispatch = useDispatch();
 
   const validate = async () => {
@@ -23,7 +25,7 @@ const useAuth = (): UseAuthReturn => {
         // unauthenticated
         dispatch(logout());
       } else {
-        handleApiError(error);
+        handleApiError(error, showNotification);
       }
     }
   };

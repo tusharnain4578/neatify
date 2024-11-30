@@ -2,7 +2,7 @@ import { useDispatch } from 'react-redux';
 import api from '../../redux/api';
 import { logout as logoutActionCreater } from '../../redux/slices/authSlice';
 import { handleApiError } from '../../utils/apiHandlers';
-import { toast } from 'react-toastify';
+import { useNotification } from '../../contexts/NotificationContext';
 
 interface UseLogoutReturn {
   logoutHandler: () => Promise<void>;
@@ -11,16 +11,16 @@ interface UseLogoutReturn {
 
 const useLogout = (): UseLogoutReturn => {
   const dispatch = useDispatch();
-
+  const { showNotification } = useNotification();
   const [logout, { isLoading }] = api.useLogoutMutation();
 
   const logoutHandler = async (): Promise<void> => {
     try {
       const res = await logout().unwrap();
       dispatch(logoutActionCreater());
-      res?.message && toast.success(res.message);
+      res?.message && showNotification(res.message);
     } catch (error) {
-      handleApiError(error);
+      handleApiError(error, showNotification);
     }
   };
 

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Api\V1;
 
 use App\Enums\ProjectStatus;
+use App\Enums\ProjectType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,11 +27,12 @@ class ProjectRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:250', 'unique:projects'],
             'description' => ['nullable', 'string'],
+            'type' => ['required', 'numeric', Rule::exists('project_types', 'id')],
             'website_url' => ['nullable', 'string', 'url'],
-            'status' => ['required', Rule::in(ProjectStatus::array())],
+            'status' => ['required', 'numeric', Rule::exists('project_statuses', 'id')],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date'],
-            'budget' => ['nullable', 'numeric', 'min:0']
+            'budget' => ['nullable', 'numeric', 'min:0'],
         ];
     }
 }

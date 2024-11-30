@@ -33,27 +33,27 @@ const Input = <T extends FieldValues>({
 
   // Mapping the size prop to Tailwind class names
   const sizeClasses = {
-    sm: 'py-1 text-sm',
-    md: 'py-1.5 text-sm',
-    lg: 'py-2 text-base',
-    xl: 'py-3 text-lg',
-    '2xl': 'py-4 text-xl',
+    sm: 'py-2 text-sm',
+    md: 'py-2 text-base',
+    lg: 'py-3 text-lg',
+    xl: 'py-3.5 text-xl',
+    '2xl': 'py-4.5 text-2xl',
   };
 
   const labelSizeClasses = {
-    sm: 'text-xs',
-    md: 'text-sm',
-    lg: 'text-base',
-    xl: 'text-lg',
-    '2xl': 'text-xl',
+    sm: 'text-sm',
+    md: 'text-base',
+    lg: 'text-lg',
+    xl: 'text-xl',
+    '2xl': 'text-2xl',
   };
 
   const placeholderSizeClasses = {
-    sm: 'placeholder:text-xs',
-    md: 'placeholder:text-sm',
-    lg: 'placeholder:text-base',
-    xl: 'placeholder:text-lg',
-    '2xl': 'placeholder:text-xl',
+    sm: 'placeholder:text-sm',
+    md: 'placeholder:text-base',
+    lg: 'placeholder:text-lg',
+    xl: 'placeholder:text-xl',
+    '2xl': 'placeholder:text-2xl',
   };
 
   return (
@@ -61,7 +61,7 @@ const Input = <T extends FieldValues>({
       {title && (
         <label
           htmlFor={elementId}
-          className={`block font-medium text-gray-900 ${labelSizeClasses[size]}`}
+          className={`mt-5 block font-medium text-gray-900 ${labelSizeClasses[size]}`}
         >
           {title}
           {rest.required && (
@@ -71,7 +71,9 @@ const Input = <T extends FieldValues>({
           )}
         </label>
       )}
-      <div className="relative mt-2 rounded-md shadow-sm">
+      <div
+        className={`relative ${title ? 'mt-2' : 'mt-5'} rounded-md shadow-sm`}
+      >
         <input
           id={elementId}
           {...registerProps}
@@ -93,7 +95,7 @@ const Input = <T extends FieldValues>({
         )}
       </div>
       {error && (
-        <p id={`input-error-${name}`} className="mt-2 text-sm text-red-600">
+        <p id={`input-error-${name}`} className="mt-1 text-sm text-red-600">
           {error}
         </p>
       )}

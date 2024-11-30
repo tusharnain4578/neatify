@@ -7,13 +7,6 @@ import {
   FetchBaseQueryError,
 } from '@reduxjs/toolkit/query/react';
 import endpoints, { API_BASE_URL, methods } from '../constants/endpoints';
-import {
-  ApiResponse,
-  UserLoginRequest,
-  UserLoginResponse,
-  UserRegisterRequest,
-  UserRegisterResponse,
-} from '../@types/api';
 import { RootState } from './store';
 
 type MyBaseQueryFn = BaseQueryFn<
@@ -24,6 +17,7 @@ type MyBaseQueryFn = BaseQueryFn<
 
 const api = createApi({
   reducerPath: 'api',
+  tagTypes: ['Project'],
   baseQuery: fetchBaseQuery({
     baseUrl: API_BASE_URL,
     prepareHeaders: (headers, { getState }) => {
@@ -62,6 +56,46 @@ const api = createApi({
     // Authentication check request
     authCheck: builder.mutation<ApiResponse<{ user: IUser }>, void>({
       query: () => ({ url: endpoints.auth.me, method: methods.POST }),
+    }),
+    // Create project
+    createProject: builder.mutation<
+      CreateProjectResponse,
+      CreateProjectRequest
+    >({
+      query: (data) => ({
+        url: endpoints.projects.create,
+        method: methods.POST,
+        body: data,
+      }),
+      invalidatesTags: ['Project'],
+    }),
+    // Project List
+    getProjects: builder.query<ApiPaginatedDataResponse<IProject>, void>({
+      query: () => ({
+        url: endpoints.projects.list,
+        method: methods.GET,
+      }),
+      providesTags: ['Project'],
+    }),
+    // Project Types
+    getProjectTypes: builder.query<
+      { success: boolean; data: SelectOption[] },
+      void
+    >({
+      query: () => ({
+        url: endpoints.projects.types,
+        method: methods.GET,
+      }),
+    }),
+    // Project Status
+    getProjectStatuses: builder.query<
+      { success: boolean; data: SelectOption[] },
+      void
+    >({
+      query: () => ({
+        url: endpoints.projects.statuses,
+        method: methods.GET,
+      }),
     }),
   }),
 });

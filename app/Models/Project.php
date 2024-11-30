@@ -15,10 +15,21 @@ class Project extends Model
     protected $fillable = [
         'title',
         'description',
+        'project_type_id',
         'website_url',
-        'status',
+        'project_status_id',
         'start_date',
         'end_date',
         'budget'
     ];
+
+    public function status()
+    {
+        return $this->belongsTo(ProjectStatus::class, 'project_status_id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo(ProjectType::class, 'project_type_id');
+    }
 }

@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\ProjectStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,8 +14,9 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
+            $table->foreignId('project_type_id')->constrained();
             $table->string('website_url')->nullable();
-            $table->enum('status', ProjectStatus::array())->default(ProjectStatus::ACTIVE->value);
+            $table->foreignId('project_status_id')->constrained();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->decimal('budget', 15, 2)->nullable();

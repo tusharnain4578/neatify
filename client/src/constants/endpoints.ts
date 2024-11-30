@@ -15,6 +15,9 @@ const endpoints = {
     me: 'me',
   },
   projects: {
+    types: 'project-types',
+    statuses: 'project-statuses',
+    list: 'projects',
     create: 'projects',
   },
 };

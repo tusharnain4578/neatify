@@ -7,10 +7,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import api from '../../redux/api';
 import { UserLoginResponse } from '../../@types/api';
-import { toast } from 'react-toastify';
 import { handleApiError } from '../../utils/apiHandlers';
 import { useDispatch } from 'react-redux';
 import { login as loginActionCreater } from '../../redux/slices/authSlice';
+import { useNotification } from '../../contexts/NotificationContext';
 
 interface Inputs {
   email: string;
@@ -40,6 +40,7 @@ const login: React.FC = (): ReactElement => {
   });
 
   const [authLogin, { isLoading }] = api.useLoginMutation();
+  const { showNotification } = useNotification();
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
 
   const dispatch = useDispatch();
@@ -50,13 +51,13 @@ const login: React.FC = (): ReactElement => {
     try {
       const res: UserLoginResponse = await authLogin(data).unwrap();
       if (res.success && res?.data) {
-        toast.success(res.message);
+        showNotification(res.message);
         setIsSubmitted(true);
         dispatch(loginActionCreater(res.data));
         navigate('/dashboard');
       }
     } catch (err: unknown) {
-      handleApiError(err, setError);
+      handleApiError(err, showNotification, setError);
     }
   };
 

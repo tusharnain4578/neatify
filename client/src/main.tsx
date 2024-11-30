@@ -7,15 +7,16 @@ import { ApiProvider } from '@reduxjs/toolkit/query/react';
 import api from './redux/api.ts';
 import { persistor, store } from './redux/store.ts';
 import { PersistGate } from 'redux-persist/integration/react';
-import { ToastContainer } from 'react-toastify';
+import { NotificationProvider } from './contexts/NotificationContext.tsx';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ApiProvider api={api}>
       <ReduxProvider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <App />
-          <ToastContainer />
+          <NotificationProvider>
+            <App />
+          </NotificationProvider>
         </PersistGate>
       </ReduxProvider>
     </ApiProvider>

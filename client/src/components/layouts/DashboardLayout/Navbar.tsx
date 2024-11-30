@@ -125,50 +125,52 @@ const Navbar: React.FC = (): ReactElement => {
           </div>
         </div>
       </div>
-      <Modal
-        open={showLogoutModal}
-        setOpen={setShowLogoutModal}
-        allowClose={!isLoading}
-        size="sm"
-      >
-        <div className="text-center">
-          {/* Check Icon */}
-          <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-green-100">
-            <FontAwesomeIcon
-              icon={faArrowRightFromBracket}
-              aria-hidden="true"
-              className="size-6 text-green-600"
-            />
-          </div>
+      {showLogoutModal && (
+        <Modal
+          open={showLogoutModal}
+          setOpen={setShowLogoutModal}
+          allowClose={!isLoading}
+          size="sm"
+        >
+          <div className="text-center">
+            {/* Check Icon */}
+            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-green-100">
+              <FontAwesomeIcon
+                icon={faArrowRightFromBracket}
+                aria-hidden="true"
+                className="size-6 text-green-600"
+              />
+            </div>
 
-          {/* Modal Header */}
-          <div className="mt-3 sm:mt-5">
-            <DialogTitle
-              as="h3"
-              className="text-base font-semibold text-gray-900"
-            >
-              Ready to log out?
-            </DialogTitle>
-            <div className="mt-2">
-              <p className="text-sm text-gray-500">
-                You're about to sign out of your account.
-              </p>
+            {/* Modal Header */}
+            <div className="mt-3 sm:mt-5">
+              <DialogTitle
+                as="h3"
+                className="text-base font-semibold text-gray-900"
+              >
+                Ready to log out?
+              </DialogTitle>
+              <div className="mt-2">
+                <p className="text-sm text-gray-500">
+                  You're about to sign out of your account.
+                </p>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="mt-5 sm:mt-6">
+              <Button
+                onClick={handleLogout}
+                title="Log out"
+                disabled={isLoading}
+                showSpinner={isLoading}
+                spinnerTitle="Logging out"
+                fullWidth
+              />
             </div>
           </div>
-
-          {/* Modal Footer */}
-          <div className="mt-5 sm:mt-6">
-            <Button
-              onClick={handleLogout}
-              title="Log out"
-              disabled={isLoading}
-              showSpinner={isLoading}
-              spinnerTitle="Logging out"
-              fullWidth
-            />
-          </div>
-        </div>
-      </Modal>
+        </Modal>
+      )}
     </>
   );
 };

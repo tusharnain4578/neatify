@@ -61,7 +61,7 @@ const Textarea = <T extends FieldValues>({
       {title && (
         <label
           htmlFor={elementId}
-          className={`block font-medium text-gray-900 ${labelSizeClasses[size]}`}
+          className={`mt-5 block font-medium text-gray-900 ${labelSizeClasses[size]}`}
         >
           {title}
           {rest.required && (
@@ -71,7 +71,9 @@ const Textarea = <T extends FieldValues>({
           )}
         </label>
       )}
-      <div className="relative mt-2 rounded-md shadow-sm">
+      <div
+        className={`relative ${title ? 'mt-2' : 'mt-5'} rounded-md shadow-sm`}
+      >
         <textarea
           id={elementId}
           {...registerProps}

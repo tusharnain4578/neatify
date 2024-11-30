@@ -6,9 +6,9 @@ import React, { ReactElement, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import api from '../../redux/api';
-import { toast } from 'react-toastify';
 import { UserRegisterResponse } from '../../@types/api';
 import { handleApiError } from '../../utils/apiHandlers';
+import { useNotification } from '../../contexts/NotificationContext';
 
 interface Inputs {
   name: string;
@@ -38,6 +38,8 @@ const Register: React.FC = (): ReactElement => {
     resolver: yupResolver(validationSchema),
   });
 
+  const { showNotification } = useNotification();
+
   const [authRegister, { isLoading }] = api.useRegisterMutation();
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -46,12 +48,12 @@ const Register: React.FC = (): ReactElement => {
     try {
       const res: UserRegisterResponse = await authRegister(data).unwrap();
       if (res.success) {
-        toast.success(res.message);
+        showNotification(res.message);
         setIsSubmitted(true);
         navigate('/login', { state: { email: data.email } });
       }
     } catch (err: unknown) {
-      handleApiError(err, setError);
+      handleApiError(err, showNotification, setError);
     }
   };
 
