@@ -6,7 +6,6 @@ import Button from '../../components/ui/Button';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import api from '../../redux/api';
-import { UserLoginResponse } from '../../@types/api';
 import { handleApiError } from '../../utils/apiHandlers';
 import { useDispatch } from 'react-redux';
 import { login as loginActionCreater } from '../../redux/slices/authSlice';

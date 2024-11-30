@@ -6,7 +6,6 @@ import React, { ReactElement, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as yup from 'yup';
 import api from '../../redux/api';
-import { UserRegisterResponse } from '../../@types/api';
 import { handleApiError } from '../../utils/apiHandlers';
 import { useNotification } from '../../contexts/NotificationContext';
 

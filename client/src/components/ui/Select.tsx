@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import { Props as ReactSelectProps } from 'react-select';
 import * as ReactSelect from 'react-select';
 import { FieldValues, Path } from 'react-hook-form';
