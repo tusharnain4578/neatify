@@ -108,7 +108,7 @@ const ProjectCard: React.FC<{
         </Link>
 
         <div className="p-6">
-          <div className="flex space-x-4 mt-7">
+          <div className="flex space-x-4">
             <button
               className="text-gray-600 hover:text-gray-800"
               onClick={() => openProjectModal(project)}

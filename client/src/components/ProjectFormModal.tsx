@@ -33,7 +33,7 @@ interface Inputs {
 }
 
 interface InputsWithId extends Inputs {
-  id?: number;
+  id: number;
 }
 
 interface IProjectFormModalProps {
@@ -75,21 +75,24 @@ const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
   const { data: projectStatusesData, isLoading: projectStatusesDataLoading } =
     api.useGetProjectStatusesQuery();
 
-  const [submitProject, { isLoading: submitProjectLoading }] = project
-    ? api.useUpdateProjectMutation()
-    : api.useCreateProjectMutation();
+  const [createProject, { isLoading: createProjectLoading }] =
+    api.useCreateProjectMutation();
+  const [updateProject, { isLoading: updateProjectLoading }] =
+    api.useUpdateProjectMutation();
 
   const projectTypes = projectTypesData?.data ?? null;
   const projectStatuses = projectStatusesData?.data ?? null;
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     try {
-      const postData: InputsWithId = data;
       if (project) {
-        postData.id = project.id;
+        const postData: InputsWithId = { ...data, id: project.id };
+        const res = await updateProject(postData).unwrap();
+        showNotification(res.message);
+      } else {
+        const res = await createProject(data).unwrap();
+        showNotification(res.message);
       }
-      const res = await submitProject(postData).unwrap();
-      showNotification(res.message);
       setOpen(false);
     } catch (err: unknown) {
       handleApiError(err, showNotification, setError);
@@ -109,6 +112,8 @@ const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
   }, [projectTypes, project]);
 
   const loading = projectTypesDataLoading || projectStatusesDataLoading;
+
+  const submitProjectLoading = createProjectLoading || updateProjectLoading;
 
   return (
     <>
