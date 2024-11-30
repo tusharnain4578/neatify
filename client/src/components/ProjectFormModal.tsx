@@ -7,7 +7,11 @@ import React, {
 } from 'react';
 import Modal from './ui/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFolderPlus, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFloppyDisk,
+  faFolderPlus,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
 import Input from './ui/Input';
 import * as yup from 'yup';
 import Textarea from './ui/Textarea';
@@ -28,9 +32,14 @@ interface Inputs {
   status: number;
 }
 
+interface InputsWithId extends Inputs {
+  id?: number;
+}
+
 interface IProjectFormModalProps {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+  project?: IProject;
 }
 
 const validationSchema: yup.ObjectSchema<Inputs> = yup.object().shape({
@@ -43,10 +52,11 @@ const validationSchema: yup.ObjectSchema<Inputs> = yup.object().shape({
 const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
   open,
   setOpen,
+  project,
 }: IProjectFormModalProps): ReactElement => {
-  const [selectedStatus, setSelectedStatus] = useState<SelectOption | null>(
-    null
-  );
+  const [selectedStatus, setSelectedStatus] = useState<
+    SelectOption | undefined
+  >(undefined);
 
   const {
     register,
@@ -65,15 +75,20 @@ const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
   const { data: projectStatusesData, isLoading: projectStatusesDataLoading } =
     api.useGetProjectStatusesQuery();
 
-  const [createProject, { isLoading: createProjectLoading }] =
-    api.useCreateProjectMutation();
+  const [submitProject, { isLoading: submitProjectLoading }] = project
+    ? api.useUpdateProjectMutation()
+    : api.useCreateProjectMutation();
 
   const projectTypes = projectTypesData?.data ?? null;
   const projectStatuses = projectStatusesData?.data ?? null;
 
   const onSubmit: SubmitHandler<Inputs> = async (data: Inputs) => {
     try {
-      const res = await createProject(data).unwrap();
+      const postData: InputsWithId = data;
+      if (project) {
+        postData.id = project.id;
+      }
+      const res = await submitProject(postData).unwrap();
       showNotification(res.message);
       setOpen(false);
     } catch (err: unknown) {
@@ -85,6 +100,14 @@ const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
     selectedStatus && setValue('status', selectedStatus.id);
   }, [selectedStatus, setValue]);
 
+  useEffect(() => {
+    project && projectStatuses && setSelectedStatus(project?.status);
+  }, [projectStatuses, project]);
+
+  useEffect(() => {
+    project && projectTypes && setValue('type', project.type.id);
+  }, [projectTypes, project]);
+
   const loading = projectTypesDataLoading || projectStatusesDataLoading;
 
   return (
@@ -93,7 +116,7 @@ const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
         <Modal.Header>
           <h3 className="text-lg text-white">
             <FontAwesomeIcon icon={faFolderPlus} className="text-base mr-3" />
-            Add Project
+            {project ? 'Update' : 'Add'} Project
           </h3>
         </Modal.Header>
         <Modal.Body>
@@ -109,6 +132,11 @@ const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
                 onChange={(x) =>
                   setValue('type', (x as ReactSelectedOption).value)
                 }
+                defaultValue={() =>
+                  project
+                    ? { label: project.type.label, value: project.type.id }
+                    : undefined
+                }
                 error={errors.type?.message}
                 required
               />
@@ -118,7 +146,8 @@ const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
                 placeholder="Enter project title"
                 formRegister={register}
                 error={errors.title?.message}
-                disabled={createProjectLoading}
+                disabled={submitProjectLoading}
+                defaultValue={project?.title}
                 required
               />
               <Textarea
@@ -127,19 +156,24 @@ const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
                 rows={5}
                 placeholder="Enter description for project"
                 formRegister={register}
+                defaultValue={project?.description}
                 error={errors.description?.message}
-                disabled={createProjectLoading}
+                disabled={submitProjectLoading}
               />
               <fieldset className="mt-5">
                 <legend className="text-sm/6 mb-1 font-semibold text-gray-900">
                   Select project status
                 </legend>
-                <RadioGroup className="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4">
+                <RadioGroup
+                  defaultValue={project?.status.id}
+                  className="grid grid-cols-1 gap-y-6 sm:grid-cols-3 sm:gap-x-4"
+                >
                   {projectStatuses?.map((status) => (
                     <Radio
                       key={status.id}
                       value={status.id}
                       aria-label={status.label}
+                      defaultChecked={selectedStatus?.id === status.id}
                       onClick={() => setSelectedStatus(status)}
                       // aria-description={`${status.description}`}
                       className="group relative flex cursor-pointer rounded-lg border border-gray-300 bg-white p-4 shadow-sm focus:outline-none data-[focus]:border-indigo-600 data-[focus]:ring-2 data-[focus]:ring-indigo-600"
@@ -173,11 +207,11 @@ const ProjectFormModal: React.FC<IProjectFormModalProps> = ({
               </fieldset>
               <div className="text-end">
                 <Button
-                  title="Create"
-                  icon={faPlus}
+                  title={project ? 'Save Changes' : 'Create'}
+                  icon={project ? faFloppyDisk : faPlus}
                   className="mt-5"
                   type="submit"
-                  disabled={createProjectLoading}
+                  disabled={submitProjectLoading}
                 />
               </div>
             </form>

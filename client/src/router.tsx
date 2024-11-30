@@ -6,6 +6,7 @@ import Auth from './components/middlewares/Auth';
 import Guest from './components/middlewares/Guest';
 import Team from './pages/team';
 import Projects from './pages/projects';
+import Project from './pages/project';
 import Dashboard from './pages/dashboard';
 
 const guestRoutes = [
@@ -16,6 +17,7 @@ const guestRoutes = [
 
 const protectedRoutes = [
   { path: '', element: <Dashboard /> },
+  { path: 'project/:id', element: <Project /> },
   { path: 'projects', element: <Projects /> },
   { path: 'team', element: <Team /> },
 ];

@@ -9,12 +9,11 @@ const Card: React.FC<ICardProps> & {
   Body: React.FC<ICardSectionProps>;
 } = ({ children }: ICardProps): ReactElement => {
   return (
-    <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+    <div className="flex flex-col divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
       {children}
     </div>
   );
 };
-
 interface ICardSectionProps {
   children: React.ReactNode;
 }

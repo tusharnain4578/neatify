@@ -40,17 +40,18 @@ class ProjectController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Project $project)
     {
-        //
+        return $this->response(success: true, data: $project);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ProjectRequest $request, Project $project)
     {
-        //
+        $project = $this->projectService->update($request, $project);
+        return $this->response(success: true, message: 'Project Updated!', data: $project);
     }
 
     /**

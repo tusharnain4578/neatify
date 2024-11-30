@@ -24,4 +24,13 @@ class ProjectService
             'project_status_id' => $request->status
         ]);
     }
+    public function update(ProjectRequest $request, Project $project): Project
+    {
+        $project->fill([
+            ...$request->validated(),
+            'project_type_id' => $request->type,
+            'project_status_id' => $request->status
+        ])->save();
+        return $project;
+    }
 }

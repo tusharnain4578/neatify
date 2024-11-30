@@ -24,8 +24,11 @@ class ProjectRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $project = $this->route('project');
+
         return [
-            'title' => ['required', 'string', 'max:250', 'unique:projects'],
+            'title' => ['required', 'string', 'max:250', Rule::unique('projects')->ignore($project?->id)],
             'description' => ['nullable', 'string'],
             'type' => ['required', 'numeric', Rule::exists('project_types', 'id')],
             'website_url' => ['nullable', 'string', 'url'],

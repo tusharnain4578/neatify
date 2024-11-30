@@ -18,7 +18,9 @@ const endpoints = {
     types: 'project-types',
     statuses: 'project-statuses',
     list: 'projects',
+    getById: 'projects', // projects/{id}
     create: 'projects',
+    update: 'projects', // projects/{id}
   },
 };
 

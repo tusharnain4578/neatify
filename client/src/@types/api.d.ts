@@ -16,12 +16,17 @@ type ApiPaginatedDataResponse<T> = {
   };
 };
 
+type ApiSingleDataResponse<T> = {
+  success: boolean;
+  data: T;
+};
+
 // User Register
-type UserRegisterRequest = {
+interface UserRegisterRequest {
   name: string;
   email: string;
   password: string;
-};
+}
 type UserRegisterResponse = ApiResponse<IUser>;
 
 // User Login
@@ -29,9 +34,16 @@ type UserLoginRequest = { email: string; password: string };
 type UserLoginResponse = ApiResponse<{ user: IUser; token: string }>;
 
 // Create Project
-type CreateProjectRequest = {
+interface CreateProjectRequest {
   title: string;
   description?: string;
+  type: number;
   status: number;
-};
+}
 type CreateProjectResponse = ApiResponse<IProject>;
+
+// Update Project
+interface UpdateProjectRequest extends CreateProjectRequest {
+  id: number;
+}
+type UpdateProjectResponse = CreateProjectResponse;

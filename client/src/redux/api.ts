@@ -69,6 +69,18 @@ const api = createApi({
       }),
       invalidatesTags: ['Project'],
     }),
+    // Update project
+    updateProject: builder.mutation<
+      UpdateProjectResponse,
+      UpdateProjectRequest
+    >({
+      query: (data) => ({
+        url: `${endpoints.projects.update}/${data.id}`,
+        method: methods.PUT,
+        body: data,
+      }),
+      invalidatesTags: ['Project'],
+    }),
     // Project List
     getProjects: builder.query<ApiPaginatedDataResponse<IProject>, void>({
       query: () => ({
@@ -76,6 +88,15 @@ const api = createApi({
         method: methods.GET,
       }),
       providesTags: ['Project'],
+    }),
+    // Project by id
+    getProjectById: builder.query<
+      ApiSingleDataResponse<IProject>,
+      { id: number }
+    >({
+      query: (data) => ({
+        url: `${endpoints.projects.getById}/${data.id}`,
+      }),
     }),
     // Project Types
     getProjectTypes: builder.query<
